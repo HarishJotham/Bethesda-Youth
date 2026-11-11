@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bethesda Youth Group - Growing Together in God's Word</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@600;700&family=Noto+Sans+Tamil:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-ivory: #FFF9EF;
+      --bg-card: #F2E5D2;
+      --sage-soft: #E5EBD9;
+      --sage-deep: #496047;
+      --sage-hover: #3A4E38;
+      --accent-gold: #B58B55;
+      --text-main: #49372F;
+      --text-muted: #806B5B;
+      --border-card: rgba(73, 55, 47, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-ivory);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      line-height: 1.6;
+    }
+    h1, h2, h3, h4, .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .font-tamil { font-family: 'Noto Sans Tamil', sans-serif; }
+    .brand-title { font-family: 'Cinzel', serif; letter-spacing: 0.08em; }
+
+    header {
+      background: rgba(255, 249, 239, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1.5px solid var(--border-card);
+      position: sticky; top: 0; z-index: 40;
+      padding: 0.75rem 1.25rem;
+    }
+    .header-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+    }
+    .brand-crest {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--sage-deep); color: #FFF;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      padding: 0.55rem 1.1rem; border-radius: 9999px;
+      font-size: 0.88rem; font-weight: 600; cursor: pointer;
+      border: 1.5px solid transparent; min-height: 42px; text-decoration: none;
+    }
+    .btn-sage { background: var(--sage-deep); color: #FFF; }
+    .btn-sage:hover { background: var(--sage-hover); }
+    .btn-gold { background: var(--accent-gold); color: #FFF; }
+    .btn-subtle { background: var(--bg-card); color: var(--text-main); border-color: var(--border-card); }
+    .btn-outline { background: transparent; border-color: var(--sage-deep); color: var(--sage-deep); }
+
+    .card {
+      background: var(--bg-card); border-radius: 16px;
+      border: 1px solid var(--border-card); padding: 1.25rem;
+      box-shadow: 0 4px 18px -2px rgba(73, 55, 47, 0.07);
+    }
+    .card-ivory { background: #FFFDF9; }
+    .badge {
+      display: inline-flex; align-items: center; padding: 0.25rem 0.65rem;
+      border-radius: 9999px; font-size: 0.75rem; font-weight: 700;
+    }
+    .badge-sage { background: var(--sage-soft); color: var(--sage-deep); }
+    .badge-gold { background: #F8EFE0; color: #8F662F; }
+
+    .screen-view { display: none; }
+    .screen-view.active { display: block; animation: fadeIn 0.2s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .app-container { max-width: 1100px; margin: 0 auto; padding: 1.25rem; flex: 1; width: 100%; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .grid-members { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.85rem; }
+
+    /* Timer */
+    .timer-container {
+      position: relative; width: 210px; height: 210px; margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+    .timer-bg { fill: none; stroke: rgba(73, 96, 71, 0.15); stroke-width: 10; }
+    .timer-bar {
+      fill: none; stroke: var(--sage-deep); stroke-width: 10;
+      stroke-linecap: round; transition: stroke-dashoffset 0.4s ease;
+    }
+    .timer-digits-box { position: absolute; text-align: center; }
+    .timer-digits { font-family: 'Cinzel', serif; font-size: 2.8rem; font-weight: 700; color: var(--sage-deep); line-height: 1; }
+
+    .verse-row {
+      padding: 0.65rem 0.5rem; border-radius: 8px; margin-bottom: 0.3rem;
+      display: flex; gap: 0.65rem; align-items: baseline; cursor: pointer;
+    }
+    .verse-row:hover { background: rgba(73, 96, 71, 0.05); }
+    .verse-highlight { background: #EDF3E6 !important; border-left: 3px solid var(--sage-deep); }
+    .verse-num { font-weight: 700; color: var(--accent-gold); min-width: 24px; font-size: 0.82rem; }
+
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0; background: rgba(73, 55, 47, 0.45);
+      backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: var(--bg-ivory); border-radius: 20px;
+      border: 1.5px solid var(--border-card); max-width: 500px; width: 100%;
+      padding: 1.75rem; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;
+    }
+    .input-control {
+      width: 100%; padding: 0.7rem 0.9rem; border-radius: 12px;
+      border: 1.5px solid var(--border-card); background: #FFFDF9;
+      font-size: 0.9rem; color: var(--text-main); outline: none;
+    }
+    .input-control:focus { border-color: var(--sage-deep); }
+    .tab-btn {
+      padding: 0.5rem 1rem; border: none; background: transparent;
+      font-weight: 700; color: var(--text-muted); cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tab-btn.active { color: var(--sage-deep); border-bottom-color: var(--sage-deep); }
+
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .header-desc { display: none; }
+      .timer-container { width: 180px; height: 180px; }
+      .timer-digits { font-size: 2.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="header-inner">
+      <div style="display: flex; align-items: center; gap: 0.65rem; cursor: pointer;" id="navBrandLogo">
+        <div class="brand-crest">B</div>
+        <div>
+          <div class="brand-title" style="font-weight: 700; font-size: 1rem; color: var(--sage-deep);">BETHESDA YOUTH</div>
+          <div class="header-desc" style="font-size: 0.7rem; color: var(--text-muted); font-style: italic;">Growing Together in God's Word</div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.4rem;">
+        <div id="navMemberSession" style="display: none; align-items: center; gap: 0.4rem; background: var(--bg-card); padding: 0.3rem 0.75rem; border-radius: 9999px;">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--sage-deep);" id="navMemberName">Youth</span>
+          <button class="btn btn-subtle" id="navSwitchMemberBtn" style="padding: 0.15rem 0.45rem; min-height: 24px; font-size: 0.7rem;">Switch</button>
+        </div>
+        <button class="btn btn-subtle" id="navBibleReaderBtn" style="display: none; font-size: 0.78rem; padding: 0.4rem 0.75rem;">Bible</button>
+        <button class="btn btn-subtle" id="navPlanBtn" style="display: none; font-size: 0.78rem; padding: 0.4rem 0.75rem;">365 Plan</button>
+        <button class="btn btn-outline" id="navAdminBtn" style="font-size: 0.78rem; padding: 0.4rem 0.75rem;">Admin Login</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <!-- Screen 1: Welcome Screen -->
+    <section id="screenWelcome" class="screen-view active" style="text-align: center; max-width: 720px; margin: 1.5rem auto;">
+      <div class="brand-crest" style="width: 70px; height: 70px; font-size: 2rem; margin: 0 auto 1rem;">B</div>
+      <h1 class="brand-title" style="font-size: 2.2rem; color: var(--sage-deep); margin-bottom: 0.25rem;">BETHESDA YOUTH GROUP</h1>
+      <p style="font-size: 1.05rem; color: var(--text-muted); font-style: italic; margin-bottom: 1.25rem;">"Growing Together in God's Word"</p>
+
+      <div class="card card-ivory" style="margin-bottom: 1.75rem; border-left: 4px solid var(--accent-gold); text-align: center;">
+        <p class="font-serif" style="font-size: 1.35rem; font-style: italic; color: var(--text-main);">
+          "Your word is a lamp to my feet and a light to my path."
+        </p>
+        <div class="font-tamil" style="font-size: 1rem; color: var(--text-muted); margin-top: 0.35rem;">
+          "உம்முடைய வசனம் என் கால்களுக்குத் தீபமும், என் பாதைக்கு வெளிச்சமுமாயிருக்கிறது."
+        </div>
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-gold); margin-top: 0.4rem; text-transform: uppercase;">
+          Psalm 119:105 · சங்கீதம் 119:105
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card" style="text-align: center; cursor: pointer; border: 2px solid var(--sage-deep);" id="btnChooseYouthMode">
+          <div style="font-size: 2rem; margin-bottom: 0.4rem;">📖</div>
+          <h3 class="font-serif" style="font-size: 1.6rem; font-weight: 700; color: var(--sage-deep); margin-bottom: 0.25rem;">YOUTH MODE</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Select your name & start your 20-min daily reading. No password needed!</p>
+          <button class="btn btn-sage" style="width: 100%;">Enter Youth Reading</button>
+        </div>
+
+        <div class="card" style="text-align: center; cursor: pointer;" id="btnChooseAdminMode">
+          <div style="font-size: 2rem; margin-bottom: 0.4rem;">🛡️</div>
+          <h3 class="font-serif" style="font-size: 1.6rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 0.25rem;">ADMIN MODE</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Church leadership access to manage youth members and view reports.</p>
+          <button class="btn btn-gold" style="width: 100%;">Administrator Login</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen 2: Youth Member Selection -->
+    <section id="screenYouthSelect" class="screen-view" style="max-width: 820px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <button class="btn btn-subtle" id="btnBackFromSelect" style="padding: 0.3rem 0.65rem; font-size: 0.75rem; margin-bottom: 0.35rem;">← Back</button>
+          <h2 class="font-serif" style="font-size: 1.8rem; color: var(--sage-deep);">Select Your Name</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Tap your name to begin your 20-minute daily reading.</p>
+        </div>
+        <div style="width: 240px;">
+          <input type="text" id="memberSearchInput" class="input-control" placeholder="Search your name..." />
+        </div>
+      </div>
+
+      <div class="grid-members" id="membersGrid"></div>
+      
+      <div id="selectedMemberSticky" style="display: none; margin-top: 1.25rem; background: var(--sage-soft); border: 2px solid var(--sage-deep); border-radius: 14px; padding: 0.85rem 1.25rem; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <div style="font-size: 0.75rem; color: var(--sage-deep); font-weight: 700; text-transform: uppercase;">Selected Youth</div>
+          <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-main);" id="stickyMemberName">Member</div>
+        </div>
+        <button class="btn btn-sage" id="btnContinueWithMember" style="padding: 0.65rem 1.5rem; font-size: 0.95rem;">Continue to Reading →</button>
+      </div>
+    </section>
+
+    <!-- Screen 3: Youth Dashboard & 20-Min Timer -->
+    <section id="screenYouthDashboard" class="screen-view">
+      <div class="card card-ivory" style="margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; border-left: 5px solid var(--sage-deep);">
+        <div>
+          <span class="badge badge-sage">Bethesda Youth Group</span>
+          <h2 class="font-serif" style="font-size: 2rem; margin-top: 0.2rem;">Welcome, <span id="dashMemberName" style="color: var(--sage-deep);">Youth</span>!</h2>
+          <p style="font-size: 0.82rem; color: var(--text-muted);" id="dashCurrentDate">Today</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn btn-sage" id="dashStartReadingBtn">Open Bible Reader</button>
+          <button class="btn btn-subtle" id="dashViewFullPlanBtn">365-Day Plan</button>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom: 1.25rem;">
+        <!-- 20-Minute Timer -->
+        <div class="card" style="text-align: center;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <h3 class="font-serif" style="font-size: 1.3rem; font-weight: 700; color: var(--sage-deep);">Daily 20-Minute Timer</h3>
+            <span class="badge badge-gold" id="timerStatusBadge">Ready</span>
+          </div>
+
+          <div class="timer-container">
+            <svg class="timer-svg" viewBox="0 0 220 220">
+              <circle class="timer-bg" cx="110" cy="110" r="95"></circle>
+              <circle id="timerBar" class="timer-bar" cx="110" cy="110" r="95"></circle>
+            </svg>
+            <div class="timer-digits-box">
+              <div class="timer-digits" id="timerDigits">20:00</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Goal: 20 Minutes</div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: center; gap: 0.6rem;">
+            <button class="btn btn-sage" id="btnTimerStart" style="padding: 0.6rem 1.5rem;">
+              <span id="btnTimerStartLabel">Start Timer</span>
+            </button>
+            <button class="btn btn-subtle" id="btnTimerReset">Reset</button>
+          </div>
+          <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.65rem;">Timer runs continuously even while reading!</p>
+        </div>
+
+        <!-- Sequential Plan Day & Anti-Cheating Lock -->
+        <div class="card card-ivory" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <span class="badge badge-sage" id="dashDayBadge">Day 1 of 365</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Sequential Journey</span>
+            </div>
+            <h3 class="font-serif" style="font-size: 1.5rem; color: var(--sage-deep); margin-bottom: 0.65rem;">Today's Assigned Scripture</h3>
+
+            <div style="background: var(--bg-card); padding: 0.85rem; border-radius: 12px; margin-bottom: 0.65rem;">
+              <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Old Testament</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main);" id="dashOTPassage">Genesis 1</div>
+              <div class="font-tamil" style="font-size: 0.9rem; color: var(--sage-deep);" id="dashOTPassageTamil">ஆதியாகமம் 1</div>
+              <div style="margin-top: 0.4rem; display: flex; gap: 0.4rem;">
+                <button class="btn btn-subtle" id="dashReadOTEnglishBtn" style="padding: 0.2rem 0.55rem; font-size: 0.72rem; min-height: 28px;">Read English</button>
+                <button class="btn btn-subtle font-tamil" id="dashReadOTTamilBtn" style="padding: 0.2rem 0.55rem; font-size: 0.72rem; min-height: 28px;">தமிழில்</button>
+              </div>
+            </div>
+
+            <div style="background: var(--bg-card); padding: 0.85rem; border-radius: 12px; margin-bottom: 0.85rem;">
+              <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">New Testament</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main);" id="dashNTPassage">Matthew 1</div>
+              <div class="font-tamil" style="font-size: 0.9rem; color: var(--sage-deep);" id="dashNTPassageTamil">மத்தேயு 1</div>
+              <div style="margin-top: 0.4rem; display: flex; gap: 0.4rem;">
+                <button class="btn btn-subtle" id="dashReadNTEnglishBtn" style="padding: 0.2rem 0.55rem; font-size: 0.72rem; min-height: 28px;">Read English</button>
+                <button class="btn btn-subtle font-tamil" id="dashReadNTTamilBtn" style="padding: 0.2rem 0.55rem; font-size: 0.72rem; min-height: 28px;">தமிழில்</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Anti-Cheating Lock: Only appears after 20-min timer finishes -->
+          <div>
+            <div id="planLockedNotice" style="padding: 0.85rem; border-radius: 12px; background: rgba(73, 96, 71, 0.08); border: 1.5px dashed var(--sage-deep); text-align: center;">
+              <div style="color: var(--sage-deep); font-weight: 700; font-size: 0.9rem;">🔒 20-Minute Reading Required</div>
+              <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;">
+                Complete your 20-minute Bible reading timer before this day's reading can be marked as complete.
+              </p>
+            </div>
+
+            <div id="planUnlockedSuccess" style="display: none; padding: 0.75rem; border-radius: 12px; background: var(--sage-soft); border: 1.5px solid var(--sage-deep); text-align: center; margin-bottom: 0.65rem;">
+              <span style="color: var(--sage-deep); font-weight: 700; font-size: 0.88rem;">
+                ★ 20 Minutes Finished! You can now mark this reading complete.
+              </span>
+            </div>
+
+            <button class="btn btn-sage" id="dashMarkPlanCompleteBtn" style="display: none; width: 100%; padding: 0.75rem; box-shadow: 0 4px 12px rgba(73, 96, 71, 0.3);">
+              <span id="dashMarkPlanCompleteLabel">✓ Mark Day Complete & Advance</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid-3">
+        <div class="card card-ivory" style="text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">365-Day Plan</div>
+          <div style="font-size: 2rem; font-weight: 700; color: var(--sage-deep); margin: 0.15rem 0;" id="statDaysCompleted">0 / 365</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);" id="statPercentCompleted">0% Complete</div>
+        </div>
+        <div class="card card-ivory" style="text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Sessions Finished</div>
+          <div style="font-size: 2rem; font-weight: 700; color: var(--accent-gold); margin: 0.15rem 0;" id="statSessionsCount">0</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);" id="statTotalMinutes">0 Total Minutes</div>
+        </div>
+        <div class="card card-ivory" style="text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Saved Verses</div>
+          <div style="font-size: 2rem; font-weight: 700; color: var(--sage-deep); margin: 0.15rem 0;" id="statBookmarksCount">0</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Tapped highlights</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen 4: Bilingual Bible Reader -->
+    <section id="screenBibleReader" class="screen-view" style="max-width: 860px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.6rem;">
+        <button class="btn btn-subtle" id="readerBackToDashBtn" style="padding: 0.35rem 0.75rem; font-size: 0.78rem;">← Back to Dashboard</button>
+        <div style="display: flex; background: var(--bg-card); border-radius: 9999px; padding: 0.2rem;">
+          <button class="tab-btn active" id="tabLangEnglish">English</button>
+          <button class="tab-btn font-tamil" id="tabLangTamil">தமிழ் வேதாகமம்</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.3rem;">
+          <button class="btn btn-subtle" id="btnFontSmaller" style="padding: 0.15rem 0.45rem; min-height: 28px;">A-</button>
+          <button class="btn btn-subtle" id="btnFontLarger" style="padding: 0.15rem 0.45rem; min-height: 28px;">A+</button>
+        </div>
+      </div>
+
+      <div class="card card-ivory" style="margin-bottom: 0.85rem; padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem;">
+        <div>
+          <button class="btn btn-sage" id="btnBookSelectorModal" style="font-size: 0.95rem; padding: 0.4rem 1rem;">
+            <span id="currentBookChapterBtnLabel">Genesis 1</span> ▾
+          </button>
+        </div>
+        <div style="display: flex; gap: 0.4rem;">
+          <button class="btn btn-subtle" id="btnPrevChapter">← Prev</button>
+          <button class="btn btn-subtle" id="btnNextChapter">Next →</button>
+        </div>
+      </div>
+
+      <div class="card card-ivory" style="padding: 1.5rem; min-height: 400px;">
+        <div style="border-bottom: 1px solid var(--border-card); padding-bottom: 0.65rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+          <h2 class="font-serif" style="font-size: 1.8rem; color: var(--sage-deep);" id="readerBookTitle">Genesis 1</h2>
+          <div class="font-tamil" style="font-size: 1.2rem; color: var(--text-muted);" id="readerBookTitleTamil">ஆதியாகமம் 1</div>
+        </div>
+        <div id="verseList" style="font-size: 18px; line-height: 1.8;"></div>
+      </div>
+    </section>
+
+    <!-- Screen 5: 365-Day Plan View -->
+    <section id="screenReadingPlan" class="screen-view" style="max-width: 860px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.6rem;">
+        <div>
+          <button class="btn btn-subtle" id="planBackToDashBtn" style="padding: 0.35rem 0.75rem; font-size: 0.78rem; margin-bottom: 0.35rem;">← Back</button>
+          <h2 class="font-serif" style="font-size: 1.8rem; color: var(--sage-deep);">365-Day Sequential Plan</h2>
+        </div>
+        <div style="display: flex; background: var(--bg-card); border-radius: 9999px; padding: 0.2rem;">
+          <button class="tab-btn active" id="planFilterAll">All</button>
+          <button class="tab-btn" id="planFilterPending">Pending</button>
+          <button class="tab-btn" id="planFilterDone">Completed</button>
+        </div>
+      </div>
+      <div id="planDaysContainer" style="display: flex; flex-direction: column; gap: 0.65rem;"></div>
+    </section>
+
+    <!-- Screen 6: Admin Dashboard -->
+    <section id="screenAdminDashboard" class="screen-view">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <span class="badge badge-gold">Admin Mode</span>
+          <h2 class="font-serif" style="font-size: 2rem;">Church Youth Leadership</h2>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-sage" id="btnAdminAddMember">+ Add Youth</button>
+          <button class="btn btn-subtle" id="btnAdminLogout">Logout</button>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="grid-3" style="margin-bottom: 1.25rem;">
+        <div class="card card-ivory" style="text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Members</div>
+          <div style="font-size: 2rem; font-weight: 700; color: var(--sage-deep);" id="adminMetricTotalMembers">0</div>
+        </div>
+        <div class="card card-ivory" style="text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">20-Min Sessions</div>
+          <div style="font-size: 2rem; font-weight: 700; color: var(--accent-gold);" id="adminMetricTotalSessions">0</div>
+        </div>
+        <div class="card card-ivory" style="text-align: center;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Minutes</div>
+          <div style="font-size: 2rem; font-weight: 700; color: var(--sage-deep);" id="adminMetricTotalMinutes">0</div>
+        </div>
+      </div>
+
+      <!-- Member Management Table -->
+      <div class="card card-ivory">
+        <h3 class="font-serif" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--sage-deep);">Youth Members</h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+            <thead>
+              <tr style="border-bottom: 1.5px solid var(--border-card); color: var(--text-muted);">
+                <th style="padding: 0.55rem;">Name</th>
+                <th style="padding: 0.55rem;">Sessions</th>
+                <th style="padding: 0.55rem;">Progress</th>
+                <th style="padding: 0.55rem;">Status</th>
+                <th style="padding: 0.55rem; text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminMembersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modals -->
+  <!-- Admin Login (Password: bethesda2026 - Hidden from UI) -->
+  <div id="modalAdminLogin" class="modal-backdrop">
+    <div class="modal-box">
+      <h3 class="font-serif" style="font-size: 1.6rem; font-weight: 700; color: var(--sage-deep); margin-bottom: 0.25rem;">Administrator Login</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Enter the church administrator password.</p>
+      <form id="formAdminLogin">
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.35rem; color: var(--text-muted);">Admin Password</label>
+          <input type="password" id="inputAdminPassword" class="input-control" placeholder="Enter password" required autofocus />
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <button type="button" class="btn btn-subtle" id="btnCloseAdminModal">Cancel</button>
+          <button type="submit" class="btn btn-sage">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Member Modal -->
+  <div id="modalMemberForm" class="modal-backdrop">
+    <div class="modal-box">
+      <h3 class="font-serif" style="font-size: 1.6rem; font-weight: 700; color: var(--sage-deep); margin-bottom: 0.85rem;">Add Youth Member</h3>
+      <form id="formMember">
+        <div style="margin-bottom: 0.85rem;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; color: var(--text-muted);">Full Name</label>
+          <input type="text" id="inputMemberName" class="input-control" placeholder="e.g. Joshua Daniel" required />
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <button type="button" class="btn btn-subtle" id="btnCloseMemberModal">Cancel</button>
+          <button type="submit" class="btn btn-sage">Save Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Book Picker Modal -->
+  <div id="modalBibleBookSelector" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 620px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <h3 class="font-serif" style="font-size: 1.5rem; color: var(--sage-deep);">Select Book & Chapter</h3>
+        <button class="btn btn-subtle" id="btnCloseBookModal" style="padding: 0.15rem 0.5rem; min-height: 28px;">✕</button>
+      </div>
+      <div style="display: flex; gap: 0.4rem; margin-bottom: 0.75rem;">
+        <button class="tab-btn active" id="tabTestamentOT">Old Testament (39)</button>
+        <button class="tab-btn" id="tabTestamentNT">New Testament (27)</button>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div id="bookListContainer" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; max-height: 260px; overflow-y: auto;"></div>
+        <div>
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase;" id="chapterPickerTitle">Chapters</div>
+          <div id="chapterGrid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.3rem; max-height: 260px; overflow-y: auto;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebration Modal -->
+  <div id="modalTimerCelebration" class="modal-backdrop">
+    <div class="modal-box" style="text-align: center; max-width: 440px;">
+      <div style="font-size: 3rem; margin-bottom: 0.4rem;">🎉</div>
+      <h3 class="font-serif" style="font-size: 1.8rem; color: var(--sage-deep); margin-bottom: 0.4rem;">Praise God! 20 Minutes Complete</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        You have faithfully spent 20 minutes in God's holy word today.
+      </p>
+      <button class="btn btn-sage" id="btnCloseCelebrationModal" style="width: 100%;">Mark Reading as Complete</button>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    // 66 Books
+    const BIBLE_BOOKS = [
+      { id: 1, name: "Genesis", tamil: "ஆதியாகமம்", testament: "OT", chapters: 50 },
+      { id: 2, name: "Exodus", tamil: "யாத்திராகமம்", testament: "OT", chapters: 40 },
+      { id: 3, name: "Leviticus", tamil: "லேவியராகமம்", testament: "OT", chapters: 27 },
+      { id: 4, name: "Numbers", tamil: "எண்ணாகமம்", testament: "OT", chapters: 36 },
+      { id: 5, name: "Deuteronomy", tamil: "உபாகமம்", testament: "OT", chapters: 34 },
+      { id: 6, name: "Joshua", tamil: "யோசுவா", testament: "OT", chapters: 24 },
+      { id: 7, name: "Judges", tamil: "நியாயாதிபதிகள்", testament: "OT", chapters: 21 },
+      { id: 8, name: "Ruth", tamil: "ரூத்", testament: "OT", chapters: 4 },
+      { id: 9, name: "1 Samuel", tamil: "1 சாமுவேல்", testament: "OT", chapters: 31 },
+      { id: 10, name: "2 Samuel", tamil: "2 சாமுவேல்", testament: "OT", chapters: 24 },
+      { id: 11, name: "1 Kings", tamil: "1 இராஜாக்கள்", testament: "OT", chapters: 22 },
+      { id: 12, name: "2 Kings", tamil: "2 இராஜாக்கள்", testament: "OT", chapters: 25 },
+      { id: 13, name: "1 Chronicles", tamil: "1 நாளாகமம்", testament: "OT", chapters: 29 },
+      { id: 14, name: "2 Chronicles", tamil: "2 நாளாகமம்", testament: "OT", chapters: 36 },
+      { id: 15, name: "Ezra", tamil: "எஸ்றா", testament: "OT", chapters: 10 },
+      { id: 16, name: "Nehemiah", tamil: "நெகேமியா", testament: "OT", chapters: 13 },
+      { id: 17, name: "Esther", tamil: "எஸ்தர்", testament: "OT", chapters: 10 },
+      { id: 18, name: "Job", tamil: "யோபு", testament: "OT", chapters: 42 },
+      { id: 19, name: "Psalms", tamil: "சங்கீதம்", testament: "OT", chapters: 150 },
+      { id: 20, name: "Proverbs", tamil: "நீதிமொழிகள்", testament: "OT", chapters: 31 },
+      { id: 21, name: "Ecclesiastes", tamil: "பிரசங்கி", testament: "OT", chapters: 12 },
+      { id: 22, name: "Song of Solomon", tamil: "உன்னதப்பாட்டு", testament: "OT", chapters: 8 },
+      { id: 23, name: "Isaiah", tamil: "ஏசாயா", testament: "OT", chapters: 66 },
+      { id: 24, name: "Jeremiah", tamil: "எரேமியா", testament: "OT", chapters: 52 },
+      { id: 25, name: "Lamentations", tamil: "புலம்பல்", testament: "OT", chapters: 5 },
+      { id: 26, name: "Ezekiel", tamil: "எசேக்கியேல்", testament: "OT", chapters: 48 },
+      { id: 27, name: "Daniel", tamil: "தானியேல்", testament: "OT", chapters: 12 },
+      { id: 28, name: "Hosea", tamil: "ஓசியா", testament: "OT", chapters: 14 },
+      { id: 29, name: "Joel", tamil: "யோவேல்", testament: "OT", chapters: 3 },
+      { id: 30, name: "Amos", tamil: "ஆமோஸ்", testament: "OT", chapters: 9 },
+      { id: 31, name: "Obadiah", tamil: "ஒபதியா", testament: "OT", chapters: 1 },
+      { id: 32, name: "Jonah", tamil: "யோனா", testament: "OT", chapters: 4 },
+      { id: 33, name: "Micah", tamil: "மீகா", testament: "OT", chapters: 7 },
+      { id: 34, name: "Nahum", tamil: "நாகூம்", testament: "OT", chapters: 3 },
+      { id: 35, name: "Habakkuk", tamil: "ஆபகூக்", testament: "OT", chapters: 3 },
+      { id: 36, name: "Zephaniah", tamil: "செப்பனியா", testament: "OT", chapters: 3 },
+      { id: 37, name: "Haggai", tamil: "ஆகாய்", testament: "OT", chapters: 2 },
+      { id: 38, name: "Zechariah", tamil: "சகரியா", testament: "OT", chapters: 14 },
+      { id: 39, name: "Malachi", tamil: "மல்கியா", testament: "OT", chapters: 4 },
+      { id: 40, name: "Matthew", tamil: "மத்தேயு", testament: "NT", chapters: 28 },
+      { id: 41, name: "Mark", tamil: "மாற்கு", testament: "NT", chapters: 16 },
+      { id: 42, name: "Luke", tamil: "லூக்கா", testament: "NT", chapters: 24 },
+      { id: 43, name: "John", tamil: "யோவான்", testament: "NT", chapters: 21 },
+      { id: 44, name: "Acts", tamil: "அப்போஸ்தலர்", testament: "NT", chapters: 28 },
+      { id: 45, name: "Romans", tamil: "ரோமர்", testament: "NT", chapters: 16 },
+      { id: 46, name: "1 Corinthians", tamil: "1 கொரிந்தியர்", testament: "NT", chapters: 16 },
+      { id: 47, name: "2 Corinthians", tamil: "2 கொரிந்தியர்", testament: "NT", chapters: 13 },
+      { id: 48, name: "Galatians", tamil: "கலாத்தியர்", testament: "NT", chapters: 6 },
+      { id: 49, name: "Ephesians", tamil: "எபேசியர்", testament: "NT", chapters: 6 },
+      { id: 50, name: "Philippians", tamil: "பிலிப்பியர்", testament: "NT", chapters: 4 },
+      { id: 51, name: "Colossians", tamil: "கொலோசெயர்", testament: "NT", chapters: 4 },
+      { id: 52, name: "1 Thessalonians", tamil: "1 தெசலோனிக்கேயர்", testament: "NT", chapters: 5 },
+      { id: 53, name: "2 Thessalonians", tamil: "2 தெசலோனிக்கேயர்", testament: "NT", chapters: 3 },
+      { id: 54, name: "1 Timothy", tamil: "1 தீமோத்தேயு", testament: "NT", chapters: 6 },
+      { id: 55, name: "2 Timothy", tamil: "2 தீமோத்தேயு", testament: "NT", chapters: 4 },
+      { id: 56, name: "Titus", tamil: "தீத்து", testament: "NT", chapters: 3 },
+      { id: 57, name: "Philemon", tamil: "பிலேமோன்", testament: "NT", chapters: 1 },
+      { id: 58, name: "Hebrews", tamil: "எபிரெயர்", testament: "NT", chapters: 13 },
+      { id: 59, name: "James", tamil: "யாக்கோபு", testament: "NT", chapters: 5 },
+      { id: 60, name: "1 Peter", tamil: "1 பேதுரு", testament: "NT", chapters: 5 },
+      { id: 61, name: "2 Peter", tamil: "2 பேதுரு", testament: "NT", chapters: 3 },
+      { id: 62, name: "1 John", tamil: "1 யோவான்", testament: "NT", chapters: 5 },
+      { id: 63, name: "2 John", tamil: "2 யோவான்", testament: "NT", chapters: 1 },
+      { id: 64, name: "3 John", tamil: "3 யோவான்", testament: "NT", chapters: 1 },
+      { id: 65, name: "Jude", tamil: "யூதா", testament: "NT", chapters: 1 },
+      { id: 66, name: "Revelation", tamil: "வெளிப்படுத்தின விசேஷம்", testament: "NT", chapters: 22 }
+    ];
+
+    const SCRIPTURE_DATABASE = {
+      "Genesis_1": {
+        en: ["In the beginning, God created the heavens and the earth.", "The earth was formless and empty. Darkness was on the deep and God’s Spirit was hovering over the waters.", "God said, 'Let there be light,' and there was light.", "God saw the light, and saw that it was good.", "God called the light 'day', and the darkness 'night'. There was evening and morning, the first day."],
+        ta: ["ஆதியிலே தேவன் வானத்தையும் பூமியையும் சிருஷ்டித்தார்.", "பூமியானது ஒழுங்கின்மையும் வெறுமையுமாய் இருந்தது; தேவனுடைய ஆவியானவர் ஜலத்தின்மேல் அசைவாடிக்கொண்டிருந்தார்.", "தேவன்: வெளிச்சம் உண்டாகக்கடவது என்றார், வெளிச்சம் உண்டாயிற்று.", "வெளிச்சம் நல்லது என்று தேவன் கண்டார்.", "தேவன் வெளிச்சத்துக்குப் பகல் என்றும், இருளுக்கு இரவு என்றும் பேரிட்டார்; முதலாம் நாள் ஆயிற்று."]
+      },
+      "Psalms_23": {
+        en: ["The Lord is my shepherd: I shall lack nothing.", "He makes me lie down in green pastures. He leads me beside quiet waters.", "He restores my soul. He guides me in paths of righteousness.", "Even though I walk through the valley of the shadow of death, I will fear no evil.", "Your rod and staff comfort me.", "Surely goodness and mercy shall follow me all the days of my life."],
+        ta: ["கர்த்தர் என் மேய்ப்பராயிருக்கிறார்; நான் தாழ்ச்சியடையேன்.", "அவர் என்னைப் புல்லுள்ள இடங்களில் படுக்கப்பண்ணி, அமர்ந்த தண்ணீர்கள் அண்டையில் என்னைக் கொண்டுபோய் விடுகிறார்.", "அவர் என் ஆத்துமாவைத் தேற்றி, என்னை நீதியின் பாதைகளில் நடத்துகிறார்.", "நான் மரண இருளின் பள்ளத்தாக்கிலே நடந்தாலும் பொல்லாப்புக்குப் பயப்படேன்.", "உமது கோலும் உமது தடியும் என்னைத் தேற்றும்.", "நிச்சயமாகவே நன்மையும் கிருபையும் என் ஜீவனுள்ள நாளெல்லாம் என்னைத் தொடரும்."]
+      },
+      "Matthew_1": {
+        en: ["The genealogy of Jesus Christ, the son of David, the son of Abraham.", "Abraham was the father of Isaac. Isaac was the father of Jacob.", "She shall give birth to a son. You shall name him Jesus, for he will save his people from their sins."],
+        ta: ["ஆபிரகாமின் குமாரனாகிய தாவீதின் குமாரன் இயேசுகிறிஸ்துவினுடைய வம்ச வரலாறு:", "ஆபிரகாம் ஈசாக்கைப் பெற்றான்; ஈசாக்கு யாக்கோபைப் பெற்றான்;", "அவள் ஒரு குமாரனைப் பெறுவாள், அவருக்கு இயேசு என்று பேரிடுவாயாக; ஏனெனில் அவர் தமது ஜனங்களின் பாவங்களை நீக்கி அவர்களை இரட்சிப்பார்."]
+      }
+    };
+
+    // Sequential 365-Day Schedule
+    function generate365Schedule() {
+      const schedule = [];
+      let otIdx = 0, otCh = 1, ntIdx = 39, ntCh = 1;
+      for (let day = 1; day <= 365; day++) {
+        const otBook = BIBLE_BOOKS[otIdx];
+        const otStart = otCh;
+        const count = (day % 3 === 0) ? 3 : 2;
+        let otEnd = Math.min(otStart + count - 1, otBook.chapters);
+        otCh = otEnd + 1;
+        if (otCh > otBook.chapters && otIdx < 38) { otIdx++; otCh = 1; }
+
+        const ntBook = BIBLE_BOOKS[ntIdx];
+        const curNtCh = ntCh;
+        ntCh++;
+        if (ntCh > ntBook.chapters) {
+          if (ntIdx < 65) { ntIdx++; ntCh = 1; }
+          else { ntIdx = 18; ntCh = 1; }
+        }
+
+        schedule.push({
+          day,
+          otText: (otStart === otEnd) ? `${otBook.name} ${otStart}` : `${otBook.name} ${otStart}-${otEnd}`,
+          otTextTamil: (otStart === otEnd) ? `${otBook.tamil} ${otStart}` : `${otBook.tamil} ${otStart}-${otEnd}`,
+          otBookName: otBook.name, otChapter: otStart,
+          ntText: `${ntBook.name} ${curNtCh}`,
+          ntTextTamil: `${ntBook.tamil} ${curNtCh}`,
+          ntBookName: ntBook.name, ntChapter: curNtCh
+        });
+      }
+      return schedule;
+    }
+    const READING_SCHEDULE = generate365Schedule();
+
+    const DEFAULT_MEMBERS = [
+      { id: "mem_1", name: "Joshua Daniel", status: "active" },
+      { id: "mem_2", name: "Sarah Paul", status: "active" },
+      { id: "mem_3", name: "Timothy Samuel", status: "active" },
+      { id: "mem_4", name: "Esther Grace", status: "active" },
+      { id: "mem_5", name: "David Raj", status: "active" },
+      { id: "mem_6", name: "Priya Mary", status: "active" }
+    ];
+
+    // State
+    const state = {
+      members: JSON.parse(localStorage.getItem('byg_m') || 'null') || DEFAULT_MEMBERS,
+      activeMember: JSON.parse(localStorage.getItem('byg_am') || 'null'),
+      readingSessions: JSON.parse(localStorage.getItem('byg_rs') || '[]'),
+      planProgress: JSON.parse(localStorage.getItem('byg_pp') || '{}'),
+      bookmarks: JSON.parse(localStorage.getItem('byg_bm') || '[]'),
+      timerCompletedForActiveDay: JSON.parse(localStorage.getItem('byg_tc') || '{}'),
+      adminPin: 'bethesda2026',
+      readerLanguage: 'en',
+      currentBook: BIBLE_BOOKS[0],
+      currentChapter: 1,
+      readerFontSize: 18,
+      timerSeconds: 1200,
+      timerRunning: false,
+      timerInterval: null,
+      timerTargetEnd: null,
+      save() {
+        localStorage.setItem('byg_m', JSON.stringify(this.members));
+        localStorage.setItem('byg_am', JSON.stringify(this.activeMember));
+        localStorage.setItem('byg_rs', JSON.stringify(this.readingSessions));
+        localStorage.setItem('byg_pp', JSON.stringify(this.planProgress));
+        localStorage.setItem('byg_bm', JSON.stringify(this.bookmarks));
+        localStorage.setItem('byg_tc', JSON.stringify(this.timerCompletedForActiveDay));
+      }
+    };
+
+    function navigateTo(id) {
+      document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateNavHeader();
+    }
+
+    function updateNavHeader() {
+      const navSession = document.getElementById('navMemberSession');
+      const navBible = document.getElementById('navBibleReaderBtn');
+      const navPlan = document.getElementById('navPlanBtn');
+      if (state.activeMember) {
+        navSession.style.display = 'inline-flex';
+        document.getElementById('navMemberName').textContent = state.activeMember.name;
+        navBible.style.display = 'inline-flex';
+        navPlan.style.display = 'inline-flex';
+      } else {
+        navSession.style.display = 'none';
+        navBible.style.display = 'none';
+        navPlan.style.display = 'none';
+      }
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    // Navigation triggers
+    document.getElementById('navBrandLogo').onclick = () => state.activeMember ? navigateTo('screenYouthDashboard') : navigateTo('screenWelcome');
+    document.getElementById('btnChooseYouthMode').onclick = () => { renderMembers(); navigateTo('screenYouthSelect'); };
+    document.getElementById('btnChooseAdminMode').onclick = () => openModal('modalAdminLogin');
+    document.getElementById('navAdminBtn').onclick = () => openModal('modalAdminLogin');
+    document.getElementById('btnBackFromSelect').onclick = () => navigateTo('screenWelcome');
+    document.getElementById('navSwitchMemberBtn').onclick = () => { selectedM = null; renderMembers(); navigateTo('screenYouthSelect'); };
+
+    // Member Selection
+    let selectedM = null;
+    function renderMembers(filter = '') {
+      const grid = document.getElementById('membersGrid');
+      grid.innerHTML = '';
+      const list = state.members.filter(m => m.status === 'active' && m.name.toLowerCase().includes(filter.toLowerCase()));
+      list.forEach(m => {
+        const card = document.createElement('div');
+        const isSel = selectedM && selectedM.id === m.id;
+        card.className = 'card';
+        card.style.cssText = `cursor: pointer; display: flex; align-items: center; gap: 0.75rem; border: ${isSel ? '2px solid var(--sage-deep)' : '1px solid var(--border-card)'}; background: ${isSel ? '#EDF3E6' : 'var(--bg-card)'};`;
+        const count = state.readingSessions.filter(s => s.member_id === m.id).length;
+        card.innerHTML = `
+          <div class="brand-crest" style="width: 40px; height: 40px; font-size: 0.95rem;">${m.name[0]}</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 700;">${m.name}</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">${count} Sessions · Active</div>
+          </div>
+        `;
+        card.onclick = () => {
+          selectedM = m;
+          renderMembers(document.getElementById('memberSearchInput').value);
+          const bar = document.getElementById('selectedMemberSticky');
+          bar.style.display = 'flex';
+          document.getElementById('stickyMemberName').textContent = m.name;
+        };
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('memberSearchInput').oninput = e => renderMembers(e.target.value);
+    document.getElementById('btnContinueWithMember').onclick = () => {
+      if (!selectedM) return;
+      state.activeMember = selectedM;
+      state.save();
+      updateDashboard();
+      navigateTo('screenYouthDashboard');
+    };
+
+    function getMemberCurrentDay(mId) {
+      if (!mId) return 1;
+      return Math.min(365, (state.planProgress[mId] || []).length + 1);
+    }
+
+    // Dashboard
+    function updateDashboard() {
+      if (!state.activeMember) return;
+      const mId = state.activeMember.id;
+      document.getElementById('dashMemberName').textContent = state.activeMember.name;
+      document.getElementById('dashCurrentDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+      const day = getMemberCurrentDay(mId);
+      const plan = READING_SCHEDULE[day - 1];
+      document.getElementById('dashDayBadge').textContent = `Day ${day} of 365`;
+      document.getElementById('dashOTPassage').textContent = plan.otText;
+      document.getElementById('dashOTPassageTamil').textContent = plan.otTextTamil;
+      document.getElementById('dashNTPassage').textContent = plan.ntText;
+      document.getElementById('dashNTPassageTamil').textContent = plan.ntTextTamil;
+
+      const isTimerDone = state.timerCompletedForActiveDay[mId] === day;
+      document.getElementById('planLockedNotice').style.display = isTimerDone ? 'none' : 'block';
+      document.getElementById('planUnlockedSuccess').style.display = isTimerDone ? 'block' : 'none';
+      document.getElementById('dashMarkPlanCompleteBtn').style.display = isTimerDone ? 'flex' : 'none';
+
+      const doneDays = (state.planProgress[mId] || []).length;
+      document.getElementById('statDaysCompleted').textContent = `${doneDays} / 365`;
+      document.getElementById('statPercentCompleted').textContent = `${((doneDays / 365) * 100).toFixed(1)}% Complete`;
+      const sessions = state.readingSessions.filter(s => s.member_id === mId);
+      document.getElementById('statSessionsCount').textContent = sessions.length;
+      document.getElementById('statTotalMinutes').textContent = `${sessions.length * 20} Total Minutes`;
+      document.getElementById('statBookmarksCount').textContent = state.bookmarks.filter(b => b.member_id === mId).length;
+    }
+
+    // Timer
+    const CIRCUMFERENCE = 2 * Math.PI * 95;
+    const timerBar = document.getElementById('timerBar');
+    const timerDigits = document.getElementById('timerDigits');
+    timerBar.style.strokeDasharray = CIRCUMFERENCE;
+
+    function updateTimerUI() {
+      const m = Math.floor(state.timerSeconds / 60);
+      const s = state.timerSeconds % 60;
+      timerDigits.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      timerBar.style.strokeDashoffset = CIRCUMFERENCE * (1 - (state.timerSeconds / 1200));
+    }
+
+    document.getElementById('btnTimerStart').onclick = () => {
+      if (state.timerRunning) {
+        state.timerRunning = false;
+        clearInterval(state.timerInterval);
+        document.getElementById('btnTimerStartLabel').textContent = "Resume";
+        document.getElementById('timerStatusBadge').textContent = "Paused";
+        return;
+      }
+      state.timerRunning = true;
+      state.timerTargetEnd = Date.now() + (state.timerSeconds * 1000);
+      document.getElementById('btnTimerStartLabel').textContent = "Pause";
+      document.getElementById('timerStatusBadge').textContent = "Reading...";
+
+      state.timerInterval = setInterval(() => {
+        const rem = Math.max(0, state.timerTargetEnd - Date.now());
+        state.timerSeconds = Math.round(rem / 1000);
+        updateTimerUI();
+
+        if (state.timerSeconds <= 0) {
+          clearInterval(state.timerInterval);
+          state.timerRunning = false;
+          document.getElementById('btnTimerStartLabel').textContent = "Start";
+          document.getElementById('timerStatusBadge').textContent = "Completed!";
+          onTimerFinished();
+        }
+      }, 250);
+    };
+
+    document.getElementById('btnTimerReset').onclick = () => {
+      clearInterval(state.timerInterval);
+      state.timerRunning = false;
+      state.timerSeconds = 1200;
+      document.getElementById('btnTimerStartLabel').textContent = "Start";
+      document.getElementById('timerStatusBadge').textContent = "Ready";
+      updateTimerUI();
+    };
+
+    function onTimerFinished() {
+      if (!state.activeMember) return;
+      const mId = state.activeMember.id;
+      const day = getMemberCurrentDay(mId);
+      state.timerCompletedForActiveDay[mId] = day;
+
+      const plan = READING_SCHEDULE[day - 1];
+      state.readingSessions.unshift({
+        id: `s_${Date.now()}`,
+        member_id: mId,
+        member_name: state.activeMember.name,
+        book: `${plan.otText} / ${plan.ntText}`,
+        completed_at: new Date().toISOString()
+      });
+      state.save();
+      updateDashboard();
+
+      if (window.confetti) window.confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+      openModal('modalTimerCelebration');
+    }
+
+    document.getElementById('btnCloseCelebrationModal').onclick = () => closeModal('modalTimerCelebration');
+
+    // Mark Complete & Advance
+    document.getElementById('dashMarkPlanCompleteBtn').onclick = () => {
+      if (!state.activeMember) return;
+      const mId = state.activeMember.id;
+      const day = getMemberCurrentDay(mId);
+      if (state.timerCompletedForActiveDay[mId] !== day) return;
+
+      if (!state.planProgress[mId]) state.planProgress[mId] = [];
+      if (!state.planProgress[mId].includes(day)) state.planProgress[mId].push(day);
+
+      delete state.timerCompletedForActiveDay[mId];
+      state.timerSeconds = 1200;
+      updateTimerUI();
+      state.save();
+      if (window.confetti) window.confetti({ particleCount: 50, spread: 50 });
+      updateDashboard();
+    };
+
+    // Scripture Reader
+    function openReader(bookName, ch, lang) {
+      state.currentBook = BIBLE_BOOKS.find(b => b.name.toLowerCase() === bookName.toLowerCase()) || BIBLE_BOOKS[0];
+      state.currentChapter = Math.min(ch, state.currentBook.chapters);
+      state.readerLanguage = lang;
+      renderScripture();
+      navigateTo('screenBibleReader');
+    }
+
+    document.getElementById('dashReadOTEnglishBtn').onclick = () => openReader(READING_SCHEDULE[getMemberCurrentDay(state.activeMember?.id) - 1].otBookName, READING_SCHEDULE[getMemberCurrentDay(state.activeMember?.id) - 1].otChapter, 'en');
+    document.getElementById('dashReadOTTamilBtn').onclick = () => openReader(READING_SCHEDULE[getMemberCurrentDay(state.activeMember?.id) - 1].otBookName, READING_SCHEDULE[getMemberCurrentDay(state.activeMember?.id) - 1].otChapter, 'ta');
+    document.getElementById('dashReadNTEnglishBtn').onclick = () => openReader(READING_SCHEDULE[getMemberCurrentDay(state.activeMember?.id) - 1].ntBookName, READING_SCHEDULE[getMemberCurrentDay(state.activeMember?.id) - 1].ntChapter, 'en');
+    document.getElementById('dashReadNTTamilBtn').onclick = () => openReader(READING_SCHEDULE[getMemberCurrentDay(state.activeMember?.id) - 1].ntBookName, READING_SCHEDULE[getMemberCurrentDay(state.activeMember?.id) - 1].ntChapter, 'ta');
+
+    document.getElementById('dashStartReadingBtn').onclick = () => { renderScripture(); navigateTo('screenBibleReader'); };
+    document.getElementById('navBibleReaderBtn').onclick = () => { renderScripture(); navigateTo('screenBibleReader'); };
+    document.getElementById('dashViewFullPlanBtn').onclick = () => { renderPlan(); navigateTo('screenReadingPlan'); };
+    document.getElementById('navPlanBtn').onclick = () => { renderPlan(); navigateTo('screenReadingPlan'); };
+    document.getElementById('readerBackToDashBtn').onclick = () => navigateTo('screenYouthDashboard');
+    document.getElementById('planBackToDashBtn').onclick = () => navigateTo('screenYouthDashboard');
+
+    function renderScripture() {
+      const isTa = state.readerLanguage === 'ta';
+      document.getElementById('tabLangEnglish').className = `tab-btn ${!isTa ? 'active' : ''}`;
+      document.getElementById('tabLangTamil').className = `tab-btn ${isTa ? 'active' : ''}`;
+      document.getElementById('readerBookTitle').textContent = `${state.currentBook.name} ${state.currentChapter}`;
+      document.getElementById('readerBookTitleTamil').textContent = `${state.currentBook.tamil} ${state.currentChapter}`;
+      document.getElementById('currentBookChapterBtnLabel').textContent = isTa ? `${state.currentBook.tamil} ${state.currentChapter}` : `${state.currentBook.name} ${state.currentChapter}`;
+
+      const listEl = document.getElementById('verseList');
+      listEl.style.fontSize = `${state.readerFontSize}px`;
+      listEl.innerHTML = '';
+
+      const key = `${state.currentBook.name}_${state.currentChapter}`;
+      let verses = SCRIPTURE_DATABASE[key] ? (isTa ? SCRIPTURE_DATABASE[key].ta : SCRIPTURE_DATABASE[key].en) : null;
+      if (!verses) {
+        verses = [];
+        for (let v = 1; v <= 10; v++) {
+          verses.push(isTa ? `கர்த்தரின் பரிசுத்த வார்த்தை — ${state.currentBook.tamil} ${state.currentChapter}:${v}. அவருடைய கிருபை என்றும் உள்ளது.` : `The word of the Lord in ${state.currentBook.name} ${state.currentChapter}:${v}. His love endures forever.`);
+        }
+      }
+
+      verses.forEach((txt, i) => {
+        const vNum = i + 1;
+        const row = document.createElement('div');
+        row.className = `verse-row ${isTa ? 'font-tamil' : 'font-serif'}`;
+        const isSaved = state.bookmarks.find(b => b.member_id === state.activeMember?.id && b.book === state.currentBook.name && b.chapter === state.currentChapter && b.verse_num === vNum);
+        if (isSaved) row.classList.add('verse-highlight');
+
+        row.innerHTML = `<span class="verse-num">${vNum}</span><span>${txt}</span>`;
+        row.onclick = () => {
+          if (!state.activeMember) return;
+          const idx = state.bookmarks.findIndex(b => b.member_id === state.activeMember.id && b.book === state.currentBook.name && b.chapter === state.currentChapter && b.verse_num === vNum);
+          if (idx !== -1) state.bookmarks.splice(idx, 1);
+          else state.bookmarks.push({ member_id: state.activeMember.id, book: state.currentBook.name, chapter: state.currentChapter, verse_num: vNum });
+          state.save();
+          renderScripture();
+        };
+        listEl.appendChild(row);
+      });
+    }
+
+    document.getElementById('tabLangEnglish').onclick = () => { state.readerLanguage = 'en'; renderScripture(); };
+    document.getElementById('tabLangTamil').onclick = () => { state.readerLanguage = 'ta'; renderScripture(); };
+    document.getElementById('btnFontSmaller').onclick = () => { state.readerFontSize = Math.max(14, state.readerFontSize - 2); renderScripture(); };
+    document.getElementById('btnFontLarger').onclick = () => { state.readerFontSize = Math.min(26, state.readerFontSize + 2); renderScripture(); };
+
+    document.getElementById('btnPrevChapter').onclick = () => {
+      if (state.currentChapter > 1) state.currentChapter--;
+      renderScripture();
+    };
+    document.getElementById('btnNextChapter').onclick = () => {
+      if (state.currentChapter < state.currentBook.chapters) state.currentChapter++;
+      renderScripture();
+    };
+
+    // Book Selector Modal
+    document.getElementById('btnBookSelectorModal').onclick = () => {
+      openModal('modalBibleBookSelector');
+      renderBookPicker('OT');
+    };
+    document.getElementById('btnCloseBookModal').onclick = () => closeModal('modalBibleBookSelector');
+    document.getElementById('tabTestamentOT').onclick = () => {
+      document.getElementById('tabTestamentOT').classList.add('active');
+      document.getElementById('tabTestamentNT').classList.remove('active');
+      renderBookPicker('OT');
+    };
+    document.getElementById('tabTestamentNT').onclick = () => {
+      document.getElementById('tabTestamentNT').classList.add('active');
+      document.getElementById('tabTestamentOT').classList.remove('active');
+      renderBookPicker('NT');
+    };
+
+    function renderBookPicker(testament) {
+      const container = document.getElementById('bookListContainer');
+      container.innerHTML = '';
+      BIBLE_BOOKS.filter(b => b.testament === testament).forEach(b => {
+        const btn = document.createElement('button');
+        btn.className = `btn btn-subtle ${state.currentBook.id === b.id ? 'btn-sage' : ''}`;
+        btn.style.cssText = 'padding: 0.35rem; font-size: 0.75rem; justify-content: flex-start;';
+        btn.innerHTML = `<div><div style="font-weight:700;">${b.name}</div><div class="font-tamil" style="font-size:0.68rem;">${b.tamil}</div></div>`;
+        btn.onclick = () => {
+          state.currentBook = b;
+          renderBookPicker(testament);
+          renderChapterPicker(b);
+        };
+        container.appendChild(btn);
+      });
+      renderChapterPicker(state.currentBook);
+    }
+
+    function renderChapterPicker(book) {
+      document.getElementById('chapterPickerTitle').textContent = `Chapters (${book.name} - ${book.chapters})`;
+      const grid = document.getElementById('chapterGrid');
+      grid.innerHTML = '';
+      for (let ch = 1; ch <= book.chapters; ch++) {
+        const btn = document.createElement('button');
+        btn.className = `btn btn-subtle ${state.currentChapter === ch ? 'btn-sage' : ''}`;
+        btn.style.cssText = 'padding: 0.3rem; font-size: 0.78rem;';
+        btn.textContent = ch;
+        btn.onclick = () => {
+          state.currentChapter = ch;
+          closeModal('modalBibleBookSelector');
+          renderScripture();
+        };
+        grid.appendChild(btn);
+      }
+    }
+
+    // 365 Plan List
+    function renderPlan(filter = 'all') {
+      const container = document.getElementById('planDaysContainer');
+      container.innerHTML = '';
+      const mId = state.activeMember?.id;
+      const curDay = getMemberCurrentDay(mId);
+      const isTimerDone = state.timerCompletedForActiveDay[mId] === curDay;
+
+      let list = READING_SCHEDULE;
+      if (filter === 'pending') list = list.filter(d => !(state.planProgress[mId] || []).includes(d.day));
+      if (filter === 'completed') list = list.filter(d => (state.planProgress[mId] || []).includes(d.day));
+
+      list.forEach(item => {
+        const isDone = (state.planProgress[mId] || []).includes(item.day);
+        const isCur = item.day === curDay && !isDone;
+        const card = document.createElement('div');
+        card.className = 'card card-ivory';
+        card.style.cssText = `padding: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; ${isCur ? 'border: 2px solid var(--sage-deep);' : ''}`;
+
+        card.innerHTML = `
+          <div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">${isCur ? '★ Current Plan' : `Day ${item.day}`}</div>
+            <div style="font-weight: 700;">${item.otText} · ${item.ntText}</div>
+          </div>
+          <div style="display: flex; gap: 0.4rem; align-items: center;">
+            <button class="btn btn-subtle" style="font-size: 0.72rem; padding: 0.25rem 0.55rem; min-height: 28px;" onclick="openReader('${item.otBookName}', ${item.otChapter}, state.readerLanguage)">Read OT</button>
+            <button class="btn btn-subtle" style="font-size: 0.72rem; padding: 0.25rem 0.55rem; min-height: 28px;" onclick="openReader('${item.ntBookName}', ${item.ntChapter}, state.readerLanguage)">Read NT</button>
+            ${isDone ? '<span class="badge badge-sage">✓ Done</span>' : (isCur ? (isTimerDone ? `<button class="btn btn-sage" style="font-size: 0.72rem; padding: 0.25rem 0.55rem; min-height: 28px;" onclick="completeActiveDay(${item.day})">Complete</button>` : '<span style="font-size: 0.72rem; color: var(--sage-deep); font-weight: 600;">🔒 20m required</span>') : '<span style="font-size: 0.72rem; color: var(--text-muted);">🔒 Locked</span>')}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    window.completeActiveDay = d => {
+      const mId = state.activeMember?.id;
+      if (d === getMemberCurrentDay(mId) && state.timerCompletedForActiveDay[mId] === d) {
+        if (!state.planProgress[mId]) state.planProgress[mId] = [];
+        state.planProgress[mId].push(d);
+        delete state.timerCompletedForActiveDay[mId];
+        state.timerSeconds = 1200;
+        updateTimerUI();
+        state.save();
+        renderPlan();
+        updateDashboard();
+      }
+    };
+
+    document.getElementById('planFilterAll').onclick = () => renderPlan('all');
+    document.getElementById('planFilterPending').onclick = () => renderPlan('pending');
+    document.getElementById('planFilterDone').onclick = () => renderPlan('completed');
+
+    // Admin Panel
+    document.getElementById('formAdminLogin').onsubmit = e => {
+      e.preventDefault();
+      if (document.getElementById('inputAdminPassword').value.trim() === state.adminPin) {
+        closeModal('modalAdminLogin');
+        document.getElementById('inputAdminPassword').value = '';
+        renderAdmin();
+        navigateTo('screenAdminDashboard');
+      } else {
+        alert("Incorrect password. Please try again.");
+      }
+    };
+    document.getElementById('btnCloseAdminModal').onclick = () => closeModal('modalAdminLogin');
+    document.getElementById('btnAdminLogout').onclick = () => navigateTo('screenWelcome');
+
+    function renderAdmin() {
+      document.getElementById('adminMetricTotalMembers').textContent = state.members.length;
+      document.getElementById('adminMetricTotalSessions').textContent = state.readingSessions.length;
+      document.getElementById('adminMetricTotalMinutes').textContent = state.readingSessions.length * 20;
+
+      const tbody = document.getElementById('adminMembersTableBody');
+      tbody.innerHTML = '';
+      state.members.forEach(m => {
+        const count = state.readingSessions.filter(s => s.member_id === m.id).length;
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid var(--border-card)';
+        tr.innerHTML = `
+          <td style="padding: 0.5rem; font-weight: 700;">${m.name}</td>
+          <td style="padding: 0.5rem;">${count}</td>
+          <td style="padding: 0.5rem;">${(state.planProgress[m.id] || []).length} / 365</td>
+          <td style="padding: 0.5rem;"><span class="badge ${m.status === 'active' ? 'badge-sage' : 'badge-gold'}">${m.status}</span></td>
+          <td style="padding: 0.5rem; text-align: right;">
+            <button class="btn btn-subtle" style="padding: 0.15rem 0.45rem; min-height: 24px; font-size: 0.7rem;" onclick="toggleStatus('${m.id}')">${m.status === 'active' ? 'Deactivate' : 'Activate'}</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.toggleStatus = id => {
+      const m = state.members.find(x => x.id === id);
+      if (m) { m.status = m.status === 'active' ? 'inactive' : 'active'; state.save(); renderAdmin(); }
+    };
+
+    document.getElementById('btnAdminAddMember').onclick = () => {
+      document.getElementById('inputMemberName').value = '';
+      openModal('modalMemberForm');
+    };
+    document.getElementById('btnCloseMemberModal').onclick = () => closeModal('modalMemberForm');
+    document.getElementById('formMember').onsubmit = e => {
+      e.preventDefault();
+      const n = document.getElementById('inputMemberName').value.trim();
+      state.members.push({ id: `m_${Date.now()}`, name: n, status: 'active' });
+      state.save();
+      closeModal('modalMemberForm');
+      renderAdmin();
+    };
+
+    // Initial Start
+    if (state.activeMember) {
+      updateDashboard();
+      navigateTo('screenYouthDashboard');
+    } else {
+      navigateTo('screenWelcome');
+    }
+  </script>
+</body>
+</html>

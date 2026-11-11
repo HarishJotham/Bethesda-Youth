@@ -149,11 +149,63 @@
     }
     .tab-btn.active { color: var(--sage-deep); border-bottom-color: var(--sage-deep); }
 
+    /* Responsive layout: keep the app readable and usable on phones */
+    html { width: 100%; overflow-x: hidden; }
+    body { width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; }
+    button, input, select, textarea { max-width: 100%; }
+    .app-container { min-width: 0; }
+    table { min-width: 620px; }
+
     @media (max-width: 768px) {
-      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: minmax(0, 1fr); }
       .header-desc { display: none; }
       .timer-container { width: 180px; height: 180px; }
       .timer-digits { font-size: 2.3rem; }
+      .app-container { padding: 0.85rem; }
+      .card { padding: 1rem; }
+      .header-inner { gap: 0.4rem; }
+      .brand-title { font-size: 0.9rem !important; }
+      .btn { min-height: 42px; }
+      .grid-members { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+      .modal-backdrop { padding: 0.5rem; align-items: flex-start; overflow-y: auto; }
+      .modal-box { margin: 1rem auto; padding: 1.1rem; max-height: calc(100dvh - 2rem); }
+      .verse-row { align-items: flex-start; }
+      .screen-view h2 { overflow-wrap: anywhere; }
+      .screen-view .card > div { min-width: 0; }
+      #screenAdminDashboard .tab-btn { padding: 0.45rem 0.65rem; font-size: 0.75rem; }
+      #screenAdminDashboard .card { overflow: hidden; }
+      #screenAdminDashboard table { min-width: 650px; }
+    }
+
+    @media (max-width: 480px) {
+      header { padding: 0.55rem 0.65rem; }
+      .header-inner { align-items: center; }
+      .brand-crest { width: 34px; height: 34px; font-size: 1rem; }
+      .brand-title { font-size: 0.78rem !important; letter-spacing: 0.04em; }
+      #navAdminBtn, #navBibleReaderBtn, #navPlanBtn { font-size: 0.68rem !important; padding: 0.35rem 0.55rem !important; }
+      #navMemberSession { max-width: 58vw; }
+      #navMemberName { max-width: 28vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .app-container { padding: 0.65rem; }
+      .card { border-radius: 13px; padding: 0.85rem; }
+      .timer-container { width: 155px; height: 155px; }
+      .timer-digits { font-size: 2rem; }
+      .grid-members { grid-template-columns: minmax(0, 1fr); }
+      .btn { font-size: 0.78rem; padding: 0.5rem 0.75rem; }
+      .input-control { font-size: 16px; }
+      #screenAdminDashboard > div:first-child { align-items: flex-start !important; }
+      #screenAdminDashboard > div:first-child > div:last-child { width: 100%; }
+      #screenAdminDashboard > div:first-child .btn { flex: 1 1 auto; }
+      #screenAdminDashboard .tab-btn { white-space: nowrap; }
+      #screenAdminDashboard .card > div[style*="overflow-x: auto"] { max-width: 100%; }
+      .modal-box { width: 100%; }
+    }
+
+    @media (max-width: 360px) {
+      .brand-title { font-size: 0.7rem !important; }
+      #navAdminBtn { font-size: 0.62rem !important; }
+      .app-container { padding: 0.5rem; }
+      .card { padding: 0.7rem; }
     }
   </style>
 </head>
@@ -531,8 +583,8 @@
         </div>
       </div>
 
-      <!-- Supabase Cloud Sync Settings -->
-      <div class="card card-ivory">
+      <!-- Supabase Cloud Sync Settings (kept hidden; cloud-sync code remains active) -->
+      <div class="card card-ivory" id="supabaseTechnicalSettings" style="display:none !important;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
           <h3 class="font-serif" style="font-size: 1.35rem; font-weight: 700; color: var(--sage-deep);">Supabase Cloud Database Settings</h3>
           <button class="btn btn-subtle" id="btnOpenSqlHelp" style="font-size: 0.75rem; padding: 0.25rem 0.6rem; min-height: 28px;">View SQL Schema Setup Guide</button>
